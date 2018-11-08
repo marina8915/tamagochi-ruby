@@ -1,5 +1,11 @@
 module Tamagochi
   class Pat
-    puts "Dragonfly"
+    def initialize(name)
+      @name = name
+    end
+
+    def create
+      @name.size.positive? ? true : false
+    end
   end
 end
