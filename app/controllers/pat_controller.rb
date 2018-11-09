@@ -1,17 +1,19 @@
+require 'erb'
+
 module Tamagochi
   class PatController
     def self.pat(req)
       if req.params.key?('name')
-        @name = Pat.new(req['name'])
-        template = File.read('./app/views/pat.html')
-        if @name.create
-          [201, { 'Content-Type' => 'text/html' }, ['Pat create - ', @name.print_name]]
+        @pat = Pat.new(name: req['name'], say: 'Hello! I`m born. ')
+        page_create = ERB.new(File.read('./app/views/page.html.erb')).result(binding)
+        if @pat.create
+          template = ERB.new(File.read('./app/views/pat.html.erb')).result(binding)
+          [201, { 'Content-Type' => 'text/html' }, [template]]
         else
-          [422, { 'Content-Type' => 'text/plain' },
-           ['Errors: Wrong name format.']]
+          [422, { 'Content-Type' => 'text/html' }, [page_create]]
         end
       else
-        [403, { 'Content-Type' => 'text/plain' }, ['Missing param: name']]
+        [403, { 'Content-Type' => 'text/html' }, [page_create]]
       end
     end
   end
