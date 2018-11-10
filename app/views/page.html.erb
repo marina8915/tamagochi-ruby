@@ -23,7 +23,7 @@
         <button class="btn btn-outline-primary" type="submit" id="button-addon2">Create</button>
       </div>
     </form>
-    <p class="alert alert-danger" style="display: <%= @display ? 'inline' : 'none' %>">Missing name</p>
+    <p class="alert alert-danger" style="display: <%= @display_error ?  'inline' : 'none' %>"><%= @error %></p>
   </div>
 </div>
 

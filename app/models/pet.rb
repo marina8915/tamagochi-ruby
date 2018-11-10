@@ -6,14 +6,9 @@ module Tamagochi
     def initialize(req:, name:, say:, params:, ignore:)
       @req = req
       @name = name
-      @display = true
       @say = say
       @parameters = params
       @ignore = ignore
-    end
-
-    def create
-      @name.size.positive? ? true : false
     end
 
     def print_name
