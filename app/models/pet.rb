@@ -34,6 +34,8 @@ module Tamagochi
 
     def play
       @say = 'I like to play! '
+      @parameters[:humor] += 10
+      @parameters[:health] += 5
       @parameters[:appetite] -= 10
       @ignore[:ignorePlay] = 0
     end
@@ -45,7 +47,8 @@ module Tamagochi
       else
         @say = 'Yummy. '
         @parameters[:appetite] += 10
-        @parameters[:health] += 10
+        @parameters[:health] += 5
+        @parameters[:humor] += 5
         @parameters[:thirst] -= 10
         @ignore[:ignoreEat] = 0
       end
@@ -57,13 +60,14 @@ module Tamagochi
         @parameters[:humor] -= 10
       else
         @say = 'Thank you. '
-        @parameters[:health] += 10
+        @parameters[:health] += 5
+        @parameters[:humor] += 5
         @parameters[:thirst] += 10
         @ignore[:ignoreDrink] = 0
       end
     end
 
-    def check
+    def increment_ignore
       if @parameters[:appetite] < 100
         @say += 'I want eat. '
         @ignore[:ignoreEat] += 1
@@ -76,10 +80,23 @@ module Tamagochi
         @say += 'I want drink. '
         @ignore[:ignoreDrink] += 1
       end
-      @parameters[:health] -= 10 if @parameters[:humor] < 50
+    end
+
+    def check_ignore
       @parameters[:humor] -= 10 if @ignore[:ignoreEat] > 2
       @parameters[:humor] -= 10 if @ignore[:ignoreDrink] > 2
       @parameters[:humor] -= 10 if @ignore[:ignorePlay] > 2
+    end
+
+    def check
+      increment_ignore
+      check_ignore
+      @parameters[:health] -= 10 if @parameters[:humor] < 50
+      @parameters[:health] -= 10 if @parameters[:thirst] < 50
+      @parameters[:health] -= 10 if @parameters[:appetite] < 50
+      @parameters[:health] -= 50 if @parameters[:humor].zero?
+      @parameters[:humor] -= 10 if @parameters[:appetite] < 50
+      @parameters[:humor] -= 10 if @parameters[:thirst] < 50
     end
 
     def speak
