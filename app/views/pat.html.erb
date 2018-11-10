@@ -13,13 +13,18 @@
 </head>
 <body>
 <div class="container">
-  <p class="name"><%= @pat.print_name %>: <%= @pat.pat_say %></p>
+  <p class="name"><%= @pat.print_name %>: <%= @pat.speak %></p>
   <ul class="parameters">
     <li>health: <%= @pat.parameters[:health] %></li>
     <li>appetite: <%= @pat.parameters[:appetite] %></li>
     <li>humor: <%= @pat.parameters[:humor] %></li>
     <li>thirst: <%= @pat.parameters[:thirst] %></li>
   </ul>
+  <form>
+    <button type="button" method="post" action="play" class="btn btn-outline-primary">Play</button>
+    <button type="button" method="post" action="eat" class="btn btn-outline-primary">Eat</button>
+    <button type="button" method="post" action="drink" class="btn btn-outline-primary">Drink</button>
+  </form>
 </div>
 
 <!-- Optional JavaScript -->

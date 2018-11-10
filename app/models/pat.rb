@@ -17,13 +17,71 @@ module Tamagochi
     end
 
     def parameters
-      @parameters
+      @parameters.inject(@parameters) do |hash, (key, _)|
+        hash[key] = 100 if hash[key] > 100
+        hash
+      end
     end
 
-    def pat_say
-      @say += 'I want eat. ' if parameters[:appetite] < 100
-      @say += 'I want play. ' if parameters[:humor] < 100
-      @say += 'I want drink. ' if parameters[:thirst] < 100
+    def self.play
+      @say = 'I`d like play! '
+      @parameters[:appetite] -= 10
+      @ignore[:ignorePlay] = 0
+      check
+      parameters
+    end
+
+    def self.eat
+      if @parameters[:appetite] >= 100
+        @say = 'I don`t want to eat. '
+        @parameters[:humor] -= 10
+      else
+        @say = 'Yummy. '
+        @parameters[:appetite] += 10
+        @parameters[:health] += 10
+        @parameters[:thirst] -= 10
+        @ignore[:ignoreEat] = 0
+      end
+      check
+      parameters
+    end
+
+    def self.drink
+      if @parameters[:appetite] >= 100
+        @say = 'I don`t want to drink. '
+        @parameters[:humor] -= 10
+      else
+        @say = 'Thank you. '
+        @parameters[:health] += 10
+        @parameters[:thirst] += 10
+        @ignore[:ignoreDrink] = 0
+      end
+      check
+      parameters
+    end
+
+    def check
+      if @parameters[:appetite] < 100
+        @say += 'I want eat. '
+        @ignore[:ignoreEat] += 1
+      end
+      if @parameters[:humor] < 100
+        @say += 'I want play. '
+        @ignore[:ignorePlay] += 1
+      end
+      if @parameters[:thirst] < 100
+        @say += 'I want drink. '
+        @ignore[:ignoreDrink] += 1
+      end
+      @parameters[:health] -= 10 if @parameters[:humor] < 50
+      @parameters[:humor] -= 10 if @ignore[:ignoreEat] > 2
+      @parameters[:humor] -= 10 if @ignore[:ignoreDrink] > 2
+      @parameters[:humor] -= 10 if @ignore[:ignorePlay] > 2
+    end
+
+    def speak
+      check
+      @say
     end
   end
 end
