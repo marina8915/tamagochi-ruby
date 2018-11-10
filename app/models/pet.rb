@@ -1,11 +1,12 @@
 module Tamagochi
-  class Pat
-    def initialize(name:, say:)
+  class Pet
+    def initialize(req:, name:, say:, params:, ignore:)
+      @req = req
       @name = name
       @display = true
       @say = say
-      @parameters = { appetite: 80, health: 100, humor: 100, thirst: 80 }
-      @ignore = { ignoreEat: 0, ignoreDrink: 0, ignorePlay: 0, ignoreSleep: 0 }
+      @parameters = params
+      @ignore = ignore
     end
 
     def create
@@ -23,15 +24,17 @@ module Tamagochi
       end
     end
 
-    def self.play
+    def params_ignore
+      @ignore
+    end
+
+    def play
       @say = 'I`d like play! '
       @parameters[:appetite] -= 10
       @ignore[:ignorePlay] = 0
-      check
-      parameters
     end
 
-    def self.eat
+    def eat
       if @parameters[:appetite] >= 100
         @say = 'I don`t want to eat. '
         @parameters[:humor] -= 10
@@ -42,11 +45,9 @@ module Tamagochi
         @parameters[:thirst] -= 10
         @ignore[:ignoreEat] = 0
       end
-      check
-      parameters
     end
 
-    def self.drink
+    def drink
       if @parameters[:appetite] >= 100
         @say = 'I don`t want to drink. '
         @parameters[:humor] -= 10
@@ -56,8 +57,6 @@ module Tamagochi
         @parameters[:thirst] += 10
         @ignore[:ignoreDrink] = 0
       end
-      check
-      parameters
     end
 
     def check
@@ -77,11 +76,22 @@ module Tamagochi
       @parameters[:humor] -= 10 if @ignore[:ignoreEat] > 2
       @parameters[:humor] -= 10 if @ignore[:ignoreDrink] > 2
       @parameters[:humor] -= 10 if @ignore[:ignorePlay] > 2
+      puts @ignore
     end
 
     def speak
+      case @req.path
+      when '/play' then play
+      when '/eat' then eat
+      when '/drink' then drink
+      end
       check
       @say
+    end
+
+    def render(template)
+      path = File.expand_path("./views/#{template}")
+      ERB.new(File.read(path)).result(binding)
     end
   end
 end

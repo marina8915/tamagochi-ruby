@@ -13,17 +13,21 @@
 </head>
 <body>
 <div class="container">
-  <p class="name"><%= @pat.print_name %>: <%= @pat.speak %></p>
+  <p class="name"><%= @pet.print_name %>: <%= @pet.speak %></p>
   <ul class="parameters">
-    <li>health: <%= @pat.parameters[:health] %></li>
-    <li>appetite: <%= @pat.parameters[:appetite] %></li>
-    <li>humor: <%= @pat.parameters[:humor] %></li>
-    <li>thirst: <%= @pat.parameters[:thirst] %></li>
+    <li>health: <%= @pet.parameters[:health] %></li>
+    <li>appetite: <%= @pet.parameters[:appetite] %></li>
+    <li>humor: <%= @pet.parameters[:humor] %></li>
+    <li>thirst: <%= @pet.parameters[:thirst] %></li>
   </ul>
-  <form>
-    <button type="button" method="post" action="play" class="btn btn-outline-primary">Play</button>
-    <button type="button" method="post" action="eat" class="btn btn-outline-primary">Eat</button>
-    <button type="button" method="post" action="drink" class="btn btn-outline-primary">Drink</button>
+  <form method="post" action="play">
+    <button type="submit" name="play" class="btn btn-outline-primary">Play</button>
+  </form>
+  <form method="post" action="eat">
+    <button type="submit" name="eat" class="btn btn-outline-primary">Eat</button>
+  </form>
+  <form method="post" action="drink">
+    <button type="submit" name="drink" class="btn btn-outline-primary">Drink</button>
   </form>
 </div>
 
