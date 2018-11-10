@@ -69,15 +69,15 @@ module Tamagochi
 
     def increment_ignore
       if @parameters[:appetite] < 100
-        @say += 'I want eat. '
+        @say += 'I want to eat. '
         @ignore[:ignoreEat] += 1
       end
       if @parameters[:humor] < 100
-        @say += 'I want play. '
+        @say += 'I want to play. '
         @ignore[:ignorePlay] += 1
       end
       if @parameters[:thirst] < 100
-        @say += 'I want drink. '
+        @say += 'I want to drink. '
         @ignore[:ignoreDrink] += 1
       end
     end

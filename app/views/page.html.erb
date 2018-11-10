@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="/style/style.css" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Tamagochi</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <title>Tamagochi</title>
 </head>
-<body>
-<div class="container">
-    <form method="post" action="pet">
-        <div class="form-group">
-            <label for="name">Name: <br></label>
-            <input class="form-control" name="name" type="text">
-            <button type="submit" class="btn btn-outline-primary">Create</button>
-        </div>
+<body class="text-center">
+  <div class="container">
+    <h1 class="h3 mb-3 font-weight-normal">Create pet</h1>
+    <form method="post" action="pet" class="input-group mb-3">
+      <input type="text" name="name"
+             class="form-control" placeholder="Pet name"
+             aria-label="Pet name" aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-primary" type="submit" id="button-addon2">Create</button>
+      </div>
     </form>
-  <p class="alert alert-danger" style="display: <%= @display ? 'inline' : 'none' %>">Missing name</p>
+    <p class="alert alert-danger" style="display: <%= @display ? 'inline' : 'none' %>">Missing name</p>
+  </div>
 </div>
 
 <!-- Optional JavaScript -->

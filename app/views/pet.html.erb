@@ -1,34 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="/style/style.css" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Tamagochi</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <title>Tamagochi</title>
 </head>
-<body>
+<body class="text-center">
 <div class="container">
-  <p class="name alert alert-success"><%= @pet.print_name %>: <%= @pet.speak %></p>
-  <ul class="parameters">
-    <li>health: <%= @pet.parameters[:health] %></li>
-    <li>appetite: <%= @pet.parameters[:appetite] %></li>
-    <li>humor: <%= @pet.parameters[:humor] %></li>
-    <li>thirst: <%= @pet.parameters[:thirst] %></li>
-  </ul>
-  <form method="post" action="play">
-    <button type="submit" name="play" class="btn btn-outline-primary">Play</button>
-  </form>
-  <form method="post" action="eat">
-    <button type="submit" name="eat" class="btn btn-outline-primary">Eat</button>
-  </form>
-  <form method="post" action="drink">
-    <button type="submit" name="drink" class="btn btn-outline-primary">Drink</button>
-  </form>
+  <p class="name alert alert-success"><strong><%= @pet.print_name %></strong>: <%= @pet.speak %></p>
+  <div class="parameters">
+    <label class="">health:</label>
+    <div class="progress">
+      <div class="progress-bar bg-danger text-center" role="progressbar "
+           style="width: <%= @pet.parameters[:health] %>%;"
+           aria-valuenow="<%= @pet.parameters[:health] %>"
+           aria-valuemin="0" aria-valuemax="100">
+        <%= @pet.parameters[:health] %>
+      </div>
+    </div>
+    appetite:
+    <div class="progress">
+      <div class="progress-bar bg-warning text-center" role="progressbar"
+           style="width: <%= @pet.parameters[:appetite] %>%;"
+           aria-valuenow="<%= @pet.parameters[:appetite] %>"
+           aria-valuemin="0" aria-valuemax="100">
+        <%= @pet.parameters[:appetite] %>
+      </div>
+    </div>
+    humor:
+    <div class="progress">
+      <div class="progress-bar bg-success text-center" role="progressbar"
+           style="width: <%= @pet.parameters[:humor] %>%;"
+           aria-valuenow="<%= @pet.parameters[:humor] %>"
+           aria-valuemin="0" aria-valuemax="100">
+        <%= @pet.parameters[:humor] %>
+      </div>
+    </div>
+    thirst:
+    <div class="progress">
+      <div class="progress-bar bg-info text-center" role="progressbar"
+           style="width: <%= @pet.parameters[:thirst] %>%;"
+           aria-valuenow="<%= @pet.parameters[:thirst] %>"
+           aria-valuemin="0" aria-valuemax="100">
+        <%= @pet.parameters[:thirst] %>
+      </div>
+    </div>
+  </div>
+  <div class="btn-toolbar">
+    <form method="post" action="play">
+      <button type="submit" name="play" class="btn btn-outline-primary mr-2">Play</button>
+    </form>
+    <form method="post" action="eat">
+      <button type="submit" name="eat" class="btn btn-outline-primary mr-2">Eat</button>
+    </form>
+    <form method="post" action="drink">
+      <button type="submit" name="drink" class="btn btn-outline-primary mr-2">Drink</button>
+    </form>
+  </div>
 </div>
 
 <!-- Optional JavaScript -->
