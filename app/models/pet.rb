@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Tamagochi
+  # class pet
   class Pet
     def initialize(req:, name:, say:, params:, ignore:)
       @req = req
@@ -20,6 +23,7 @@ module Tamagochi
     def parameters
       @parameters.inject(@parameters) do |hash, (key, _)|
         hash[key] = 100 if hash[key] > 100
+        hash[key] = 0 if hash[key] < 0
         hash
       end
     end
@@ -29,7 +33,7 @@ module Tamagochi
     end
 
     def play
-      @say = 'I`d like play! '
+      @say = 'I like to play! '
       @parameters[:appetite] -= 10
       @ignore[:ignorePlay] = 0
     end
@@ -48,7 +52,7 @@ module Tamagochi
     end
 
     def drink
-      if @parameters[:appetite] >= 100
+      if @parameters[:thirst] >= 100
         @say = 'I don`t want to drink. '
         @parameters[:humor] -= 10
       else
@@ -76,7 +80,6 @@ module Tamagochi
       @parameters[:humor] -= 10 if @ignore[:ignoreEat] > 2
       @parameters[:humor] -= 10 if @ignore[:ignoreDrink] > 2
       @parameters[:humor] -= 10 if @ignore[:ignorePlay] > 2
-      puts @ignore
     end
 
     def speak
@@ -87,11 +90,6 @@ module Tamagochi
       end
       check
       @say
-    end
-
-    def render(template)
-      path = File.expand_path("./views/#{template}")
-      ERB.new(File.read(path)).result(binding)
     end
   end
 end

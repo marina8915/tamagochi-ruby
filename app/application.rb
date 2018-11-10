@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require './app/controllers/errors_controller'
 require './app/controllers/pages_controller'
 require './app/controllers/pet_controller'
 require './app/models/pet'
 
 module Tamagochi
+  # class Application
   class Application
     def self.call(env)
       req = Rack::Request.new(env)
