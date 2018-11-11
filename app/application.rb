@@ -16,6 +16,8 @@ module Tamagochi
       return PetController.action(req) if req.post? && req.path == '/eat'
       return PetController.action(req) if req.post? && req.path == '/drink'
       return PetController.action(req) if req.post? && req.path == '/treat'
+      return PetController.action(req) if req.post? && req.path == '/sleep'
+      return PetController.action(req) if req.post? && req.path == '/awake'
 
       ErrorsController.not_found
     end

@@ -53,20 +53,29 @@
       </div>
     </div>
   </div>
-  <div class="btn-toolbar">
-    <form method="post" action="play">
-      <button type="submit" name="play" class="btn btn-outline-primary mr-2">Play</button>
-    </form>
-    <form method="post" action="eat">
-      <button type="submit" name="eat" class="btn btn-outline-primary mr-2">Eat</button>
-    </form>
-    <form method="post" action="drink">
-      <button type="submit" name="drink" class="btn btn-outline-primary mr-2">Drink</button>
-    </form>
-    <form method="post" action="treat"
-          style="display: <%= (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] < 50 )? 'inline' : 'none' %>">
-      <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Treat</button>
-    </form>
+  <div class="btn-toolbar" style="display: <%= @pet.dreams ? 'none': 'flex' %>">
+      <form method="post" action="play">
+        <button type="submit" name="play" class="btn btn-outline-primary mr-2">Play</button>
+      </form>
+      <form method="post" action="eat">
+        <button type="submit" name="eat" class="btn btn-outline-primary mr-2">Eat</button>
+      </form>
+      <form method="post" action="drink">
+        <button type="submit" name="drink" class="btn btn-outline-primary mr-2">Drink</button>
+      </form>
+      <form method="post" action="treat"
+            style="display: <%= (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] < 50 )? 'inline' : 'none' %>">
+        <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Treat</button>
+      </form>
+      <form method="post" action="sleep"
+            style="display: <%= @pet.check_time_sleep(10) ? 'inline' : 'none' %>">
+        <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Sleep</button>
+      </form>
+  </div>
+  <form method="post" action="awake"
+        style="display: <%= @pet.dreams ? 'inline' : 'none' %>">
+    <button type="submit" name="awake" class="btn btn-outline-primary mr-2">Awake</button>
+  </form>
   </div>
 </div>
 

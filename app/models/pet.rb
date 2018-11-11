@@ -1,18 +1,34 @@
 # frozen_string_literal: true
 
+require 'time'
+
 module Tamagochi
   # class pet
   class Pet
-    def initialize(req:, name:, say:, params:, ignore:)
+    def initialize(req:, name:, say:, params:, ignore:, time:, dreams:)
       @req = req
       @name = name
       @say = say
       @parameters = params
       @ignore = ignore
+      @time = time
+      @dreams = dreams
     end
 
     def print_name
       @name
+    end
+
+    def time
+      @time
+    end
+
+    def dreams
+      @dreams
+    end
+
+    def check_time_sleep(period)
+      Time.now - @time >= period
     end
 
     def parameters
@@ -33,6 +49,7 @@ module Tamagochi
       @parameters[:health] += 5
       @parameters[:appetite] -= 5
       @ignore[:ignorePlay] = 0
+      check
     end
 
     def eat
@@ -47,6 +64,7 @@ module Tamagochi
         @parameters[:thirst] -= 10
         @ignore[:ignoreEat] = 0
       end
+      check
     end
 
     def drink
@@ -60,6 +78,7 @@ module Tamagochi
         @parameters[:thirst] += 10
         @ignore[:ignoreDrink] = 0
       end
+      check
     end
 
     def treat
@@ -72,6 +91,30 @@ module Tamagochi
         hash[key] = 0
         hash
       end
+      check
+    end
+
+    def sleep
+      if check_time_sleep(10) && @req.path == '/sleep'
+        @say = 'zzZ'
+        @time = Time.now
+        @dreams = true
+        @ignore[:ignoreSleep] = 0
+      end
+    end
+
+    def awake
+      @say = 'Good morning!'
+      @ignore.inject(@ignore) do |hash, (key, _)|
+        hash[key] = 0
+        hash
+      end
+      @parameters.inject(@parameters) do |hash, (key, _)|
+        hash[key] += 20
+        hash
+      end
+      @dreams = false
+      check
     end
 
     def increment_ignore
@@ -95,9 +138,10 @@ module Tamagochi
     end
 
     def check_ignore
-      @parameters[:humor] -= 5 if @ignore[:ignoreEat] > 5
-      @parameters[:humor] -= 5 if @ignore[:ignoreDrink] > 5
-      @parameters[:humor] -= 10 if @ignore[:ignorePlay] > 5
+      @parameters[:humor] -= 5 if @ignore[:ignoreEat] >= 5
+      @parameters[:humor] -= 5 if @ignore[:ignoreDrink] >= 5
+      @parameters[:humor] -= 10 if @ignore[:ignorePlay] >= 5
+      @parameters[:health] -= 10 if @ignore[:ignoreSleep] >= 5
     end
 
     def check
@@ -124,8 +168,9 @@ module Tamagochi
       when '/eat' then eat
       when '/drink' then drink
       when '/treat' then treat
+      when '/sleep' then sleep
+      when '/awake' then awake
       end
-      check
       @say
     end
   end
