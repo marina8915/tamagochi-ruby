@@ -16,11 +16,14 @@ module Tamagochi
                        params: { appetite: 80, health: 100,
                                  humor: 100, thirst: 90 },
                        ignore: { ignoreEat: 0, ignoreDrink: 0, ignorePlay: 0 })
-        if @pet_name.delete(' ').size > 5
+        # check if @pet_name less then 5 characters then create error
+        if @pet_name.delete(' ').size >= 5
           template = ERB.new(File.read('./app/views/pet.html.erb')).result(binding)
           [201, { 'Content-Type' => 'text/html' }, [template]]
         else
-          @error = Error.new(display: true, text: 'Name must contain more than 5 characters.')
+          text_error = 'The name must contain at least 5 characters.'
+          @error = Error.new(display: true,
+                             text: text_error)
           page_create = ERB.new(File.read('./app/views/page.html.erb')).result(binding)
           [422, { 'Content-Type' => 'text/html' }, [page_create]]
         end

@@ -18,7 +18,7 @@ module Tamagochi
     def parameters
       @parameters.inject(@parameters) do |hash, (key, _)|
         hash[key] = 100 if hash[key] > 100
-        hash[key] = 0 if hash[key] < 0
+        hash[key] = 0 if hash[key].negative?
         hash
       end
     end
