@@ -28,7 +28,10 @@ module Tamagochi
     end
 
     def check_time_sleep(period)
-      Time.now - @time >= period
+      result = Time.now - @time >= period
+      @ignore[:ignoreSleep] += 1 if result
+      check
+      result
     end
 
     def parameters
@@ -104,7 +107,7 @@ module Tamagochi
     end
 
     def awake
-      @say = 'Good morning!'
+      @say = 'Good morning! '
       @ignore.inject(@ignore) do |hash, (key, _)|
         hash[key] = 0
         hash
@@ -122,10 +125,14 @@ module Tamagochi
         @say += 'I want to eat. '
         @ignore[:ignoreEat] += 1
       end
+      @say += 'I am ill. ' if @parameters[:health] <= 50
       if @parameters[:humor] < 80
         if @parameters[:humor] <= 50
           @say += 'I am ill. '
           @ignore[:ignorePlay] = 1
+        elsif @ignore[:ignoreSleep] >= 1
+          @say += 'I am tired.'
+          @ignore[:ignoreSleep] += 1
         else
           @say += 'I want to play. '
           @ignore[:ignorePlay] += 1
@@ -145,15 +152,14 @@ module Tamagochi
     end
 
     def check
-      increment_ignore
-      check_ignore
       @parameters[:health] -= 10 if @parameters[:humor] <= 50
       @parameters[:health] -= 10 if @parameters[:thirst] < 50
       @parameters[:health] -= 10 if @parameters[:appetite] < 50
       @parameters[:health] -= 50 if @parameters[:humor].zero?
       @parameters[:humor] -= 10 if @parameters[:appetite] < 50
       @parameters[:humor] -= 10 if @parameters[:thirst] < 50
-      parameters
+      check_ignore
+      increment_ignore
     end
 
     def check_health

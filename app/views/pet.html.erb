@@ -64,11 +64,11 @@
         <button type="submit" name="drink" class="btn btn-outline-primary mr-2">Drink</button>
       </form>
       <form method="post" action="treat"
-            style="display: <%= (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] < 50 )? 'inline' : 'none' %>">
+            style="display: <%= (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] <= 50 )? 'inline' : 'none' %>">
         <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Treat</button>
       </form>
       <form method="post" action="sleep"
-            style="display: <%= @pet.check_time_sleep(10) ? 'inline' : 'none' %>">
+            style="display: <%= @pet.check_time_sleep(20) ? 'inline' : 'none' %>">
         <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Sleep</button>
       </form>
   </div>
