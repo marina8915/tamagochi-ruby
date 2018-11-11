@@ -125,12 +125,9 @@ module Tamagochi
         @say += 'I want to eat. '
         @ignore[:ignoreEat] += 1
       end
-      @say += 'I am ill. ' if @parameters[:health] <= 50
+      @say += 'I am ill. ' if @parameters[:health] <= 50 || @parameters[:humor] <= 50
       if @parameters[:humor] < 80
-        if @parameters[:humor] <= 50
-          @say += 'I am ill. '
-          @ignore[:ignorePlay] = 1
-        elsif @ignore[:ignoreSleep] >= 1
+        if @ignore[:ignoreSleep] >= 1
           @say += 'I am tired.'
           @ignore[:ignoreSleep] += 1
         else
@@ -160,6 +157,7 @@ module Tamagochi
       @parameters[:humor] -= 10 if @parameters[:thirst] < 50
       check_ignore
       increment_ignore
+      parameters
     end
 
     def check_health
