@@ -92,6 +92,13 @@ module Tamagochi
       @parameters[:health] -= 50 if @parameters[:humor].zero?
       @parameters[:humor] -= 10 if @parameters[:appetite] < 50
       @parameters[:humor] -= 10 if @parameters[:thirst] < 50
+      parameters
+    end
+
+    def check_health
+      check
+      params_zero = @parameters.select { |_, value| value.zero? }
+      @parameters[:health].zero? || params_zero.size > 1
     end
 
     def speak

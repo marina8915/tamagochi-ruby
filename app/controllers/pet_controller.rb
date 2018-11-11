@@ -33,8 +33,15 @@ module Tamagochi
     def self.action(req)
       @pet = Pet.new(req: req, name: @pet_name, say: '',
                      params: @pet.parameters, ignore: @pet.params_ignore)
-      template = ERB.new(File.read('./app/views/pet.html.erb')).result(binding)
-      [201, { 'Content-Type' => 'text/html' }, [template]]
+      if @pet.check_health
+        @error = Error.new(display: true, text: 'Your pet die.')
+        page_create = ERB.new(File.read('./app/views/page.html.erb')).result(binding)
+        [201, { 'Content-Type' => 'text/html' }, [page_create]]
+      else
+        template = ERB.new(File.read('./app/views/pet.html.erb')).result(binding)
+        [201, { 'Content-Type' => 'text/html' }, [template]]
+      end
+
     end
   end
 end
