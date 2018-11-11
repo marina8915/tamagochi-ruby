@@ -41,7 +41,6 @@ module Tamagochi
         template = ERB.new(File.read('./app/views/pet.html.erb')).result(binding)
         [201, { 'Content-Type' => 'text/html' }, [template]]
       end
-
     end
   end
 end
