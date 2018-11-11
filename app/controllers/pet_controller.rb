@@ -2,6 +2,7 @@
 
 require 'erb'
 require './app/models/pet'
+require './app/models/error'
 
 module Tamagochi
   # class PetController for model Pat action create, play, eat, drink
@@ -15,14 +16,12 @@ module Tamagochi
                        params: { appetite: 80, health: 100,
                                  humor: 100, thirst: 90 },
                        ignore: { ignoreEat: 0, ignoreDrink: 0, ignorePlay: 0 })
-        page_create = ERB.new(File.read('./app/views/page.html.erb')).result(binding)
         if @pet_name.delete(' ').size > 5
-          @display_error = false
           template = ERB.new(File.read('./app/views/pet.html.erb')).result(binding)
           [201, { 'Content-Type' => 'text/html' }, [template]]
         else
-          @display_error = true
-          @error = 'Name must contain more than 5 characters.'
+          @error = Error.new(display: true, text: 'Name must contain more than 5 characters.')
+          page_create = ERB.new(File.read('./app/views/page.html.erb')).result(binding)
           [422, { 'Content-Type' => 'text/html' }, [page_create]]
         end
       end
