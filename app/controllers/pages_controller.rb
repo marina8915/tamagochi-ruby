@@ -3,7 +3,7 @@
 require 'erb'
 require './app/models/error'
 
-module Tamagochi
+module Tamagotchi
   # class for the page to create a pet
   class PagesController
     def self.create

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Tamagochi
+module Tamagotchi
   # class for display error pet create form
   class Error
     def initialize(display:, text:)

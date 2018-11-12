@@ -5,55 +5,61 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="/style/style.css" rel="stylesheet">
+  <link href="/style/style.css?v=001" rel="stylesheet">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <title>Tamagochi</title>
+  <title>Tamagotchi</title>
 </head>
 <body class="text-center">
 <div class="container">
-  <p class="name alert alert-success"><strong><%= @pet.print_name %></strong>: <%= @pet.speak %></p>
-  <div class="parameters">
-    <label class="">health:</label>
-    <div class="progress">
-      <div class="progress-bar bg-danger text-center" role="progressbar "
-           style="width: <%= @pet.parameters[:health] %>%;"
-           aria-valuenow="<%= @pet.parameters[:health] %>"
-           aria-valuemin="0" aria-valuemax="100">
-        <%= @pet.parameters[:health] %>
+  <p class="name alert alert-success"><strong><%= @pet.attr_reader_name %></strong>: <%= @pet.speak %></p>
+  <div class="param-block">
+    <div class="parameters">
+      <label>health:</label>
+      <div class="progress">
+        <div class="progress-bar bg-danger text-center" role="progressbar "
+             style="width: <%= @pet.parameters[:health] %>%;"
+             aria-valuenow="<%= @pet.parameters[:health] %>"
+             aria-valuemin="0" aria-valuemax="100">
+          <%= @pet.parameters[:health] %>
+        </div>
+      </div>
+      <label>appetite:</label>
+      <div class="progress">
+        <div class="progress-bar bg-warning text-center" role="progressbar"
+             style="width: <%= @pet.parameters[:appetite] %>%;"
+             aria-valuenow="<%= @pet.parameters[:appetite] %>"
+             aria-valuemin="0" aria-valuemax="100">
+          <%= @pet.parameters[:appetite] %>
+        </div>
+      </div>
+      <label>humor:</label>
+      <div class="progress">
+        <div class="progress-bar bg-success text-center" role="progressbar"
+             style="width: <%= @pet.parameters[:humor] %>%;"
+             aria-valuenow="<%= @pet.parameters[:humor] %>"
+             aria-valuemin="0" aria-valuemax="100">
+          <%= @pet.parameters[:humor] %>
+        </div>
+      </div>
+      <label>thirst:</label>
+      <div class="progress">
+        <div class="progress-bar bg-info text-center" role="progressbar"
+             style="width: <%= @pet.parameters[:thirst] %>%;"
+             aria-valuenow="<%= @pet.parameters[:thirst] %>"
+             aria-valuemin="0" aria-valuemax="100">
+          <%= @pet.parameters[:thirst] %>
+        </div>
       </div>
     </div>
-    appetite:
-    <div class="progress">
-      <div class="progress-bar bg-warning text-center" role="progressbar"
-           style="width: <%= @pet.parameters[:appetite] %>%;"
-           aria-valuenow="<%= @pet.parameters[:appetite] %>"
-           aria-valuemin="0" aria-valuemax="100">
-        <%= @pet.parameters[:appetite] %>
-      </div>
-    </div>
-    humor:
-    <div class="progress">
-      <div class="progress-bar bg-success text-center" role="progressbar"
-           style="width: <%= @pet.parameters[:humor] %>%;"
-           aria-valuenow="<%= @pet.parameters[:humor] %>"
-           aria-valuemin="0" aria-valuemax="100">
-        <%= @pet.parameters[:humor] %>
-      </div>
-    </div>
-    thirst:
-    <div class="progress">
-      <div class="progress-bar bg-info text-center" role="progressbar"
-           style="width: <%= @pet.parameters[:thirst] %>%;"
-           aria-valuenow="<%= @pet.parameters[:thirst] %>"
-           aria-valuemin="0" aria-valuemax="100">
-        <%= @pet.parameters[:thirst] %>
-      </div>
+    <div class="img">
+      <img src="/images/puppy<%= @pet.attr_reader_dreams ? '3' : (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] <= 50 ) ? '2' : '1' %>.jpg"
+           align="<%= @pet.attr_reader_name %>"/>
     </div>
   </div>
-  <div class="btn-toolbar" style="display: <%= @pet.dreams ? 'none': 'flex' %>">
+  <div class="btn-toolbar" style="display: <%= @pet.attr_reader_dreams ? 'none': 'flex' %>">
       <form method="post" action="play">
         <button type="submit" name="play" class="btn btn-outline-primary mr-2">Play</button>
       </form>
@@ -64,16 +70,16 @@
         <button type="submit" name="drink" class="btn btn-outline-primary mr-2">Drink</button>
       </form>
       <form method="post" action="treat"
-            style="display: <%= (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] < 50 )? 'inline' : 'none' %>">
+            style="display: <%= (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] <= 50 )? 'inline' : 'none' %>">
         <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Treat</button>
       </form>
       <form method="post" action="sleep"
-            style="display: <%= @pet.check_time_sleep(10) ? 'inline' : 'none' %>">
+            style="display: <%= @pet.check_time_sleep(20) ? 'inline' : 'none' %>">
         <button type="submit" name="treat" class="btn btn-outline-primary mr-2">Sleep</button>
       </form>
   </div>
   <form method="post" action="awake"
-        style="display: <%= @pet.dreams ? 'inline' : 'none' %>">
+        style="display: <%= @pet.attr_reader_dreams ? 'inline' : 'none' %>">
     <button type="submit" name="awake" class="btn btn-outline-primary mr-2">Awake</button>
   </form>
   </div>

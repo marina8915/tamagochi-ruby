@@ -5,19 +5,18 @@ require './app/controllers/pages_controller'
 require './app/controllers/pet_controller'
 require './app/models/pet'
 
-module Tamagochi
-  # class Application
+module Tamagotchi
+  # class Application redirect to action
   class Application
     def self.call(env)
       req = Rack::Request.new(env)
-      return PagesController.create if req.get?  && req.path == '/'
-      return PetController.pet(req) if req.post? && req.path == '/pet'
-      return PetController.action(req) if req.post? && req.path == '/play'
-      return PetController.action(req) if req.post? && req.path == '/eat'
-      return PetController.action(req) if req.post? && req.path == '/drink'
-      return PetController.action(req) if req.post? && req.path == '/treat'
-      return PetController.action(req) if req.post? && req.path == '/sleep'
-      return PetController.action(req) if req.post? && req.path == '/awake'
+      return PagesController.create if req.get? && req.path == '/'
+
+      if req.post?
+        return PetController.pet(req) if req.path == '/pet'
+
+        return PetController.action(req)
+      end
 
       ErrorsController.not_found
     end

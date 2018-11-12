@@ -2,4 +2,4 @@
 
 require './app/application'
 
-run Rack::Cascade.new([Rack::File.new('public'), Tamagochi::Application])
+run Rack::Cascade.new([Rack::File.new('public'), Tamagotchi::Application])
