@@ -14,10 +14,10 @@
 </head>
 <body class="text-center">
 <div class="container">
-  <p class="name alert alert-success"><strong><%= @pet.print_name %></strong>: <%= @pet.speak %></p>
+  <p class="name alert alert-success"><strong><%= @pet.attr_reader_name %></strong>: <%= @pet.speak %></p>
   <div class="param-block">
     <div class="parameters">
-      <label class="">health:</label>
+      <label>health:</label>
       <div class="progress">
         <div class="progress-bar bg-danger text-center" role="progressbar "
              style="width: <%= @pet.parameters[:health] %>%;"
@@ -26,7 +26,7 @@
           <%= @pet.parameters[:health] %>
         </div>
       </div>
-      appetite:
+      <label>appetite:</label>
       <div class="progress">
         <div class="progress-bar bg-warning text-center" role="progressbar"
              style="width: <%= @pet.parameters[:appetite] %>%;"
@@ -35,7 +35,7 @@
           <%= @pet.parameters[:appetite] %>
         </div>
       </div>
-      humor:
+      <label>humor:</label>
       <div class="progress">
         <div class="progress-bar bg-success text-center" role="progressbar"
              style="width: <%= @pet.parameters[:humor] %>%;"
@@ -44,7 +44,7 @@
           <%= @pet.parameters[:humor] %>
         </div>
       </div>
-      thirst:
+      <label>thirst:</label>
       <div class="progress">
         <div class="progress-bar bg-info text-center" role="progressbar"
              style="width: <%= @pet.parameters[:thirst] %>%;"
@@ -55,11 +55,11 @@
       </div>
     </div>
     <div class="img">
-      <img src="/images/puppy<%= @pet.dreams ? '3' : (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] <= 50 ) ? '2' : '1' %>.jpg"
-           align="<%= @pet.print_name %>"/>
+      <img src="/images/puppy<%= @pet.attr_reader_dreams ? '3' : (@pet.parameters[:health] <= 50 || @pet.parameters[:humor] <= 50 ) ? '2' : '1' %>.jpg"
+           align="<%= @pet.attr_reader_name %>"/>
     </div>
   </div>
-  <div class="btn-toolbar" style="display: <%= @pet.dreams ? 'none': 'flex' %>">
+  <div class="btn-toolbar" style="display: <%= @pet.attr_reader_dreams ? 'none': 'flex' %>">
       <form method="post" action="play">
         <button type="submit" name="play" class="btn btn-outline-primary mr-2">Play</button>
       </form>
@@ -79,7 +79,7 @@
       </form>
   </div>
   <form method="post" action="awake"
-        style="display: <%= @pet.dreams ? 'inline' : 'none' %>">
+        style="display: <%= @pet.attr_reader_dreams ? 'inline' : 'none' %>">
     <button type="submit" name="awake" class="btn btn-outline-primary mr-2">Awake</button>
   </form>
   </div>
