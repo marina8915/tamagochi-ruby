@@ -5,7 +5,7 @@ require 'time'
 require './app/models/pet'
 require './app/models/error'
 
-module Tamagochi
+module Tamagotchi
   # class PetController for model Pat
   class PetController
     def self.pet(req)

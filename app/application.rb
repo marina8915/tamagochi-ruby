@@ -5,7 +5,7 @@ require './app/controllers/pages_controller'
 require './app/controllers/pet_controller'
 require './app/models/pet'
 
-module Tamagochi
+module Tamagotchi
   # class Application redirect to action
   class Application
     def self.call(env)

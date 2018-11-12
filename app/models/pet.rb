@@ -2,7 +2,7 @@
 
 require 'time'
 
-module Tamagochi
+module Tamagotchi
   # class pet can read parameters - name, time, dreams, parameters, params_ignore
   # methods for action - play, sleep, awake, eat, drink, treat
   # methods for check and change parameters: increment_ignore, check_ignore, check
