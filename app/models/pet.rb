@@ -135,11 +135,8 @@ module Tamagotchi
 
     def check_ignore
       big_ignore = @ignore.select { |_, value| value >= 5 }
-      if big_ignore.size.positive?
-        @parameters[:humor] -= 5
-      elsif big_ignore.size > 1
-        @parameters[:health] -= 10
-      end
+      @parameters[:humor] -= 5 if big_ignore.size.positive?
+      @parameters[:health] -= 10 if big_ignore.size > 1
     end
 
     def check

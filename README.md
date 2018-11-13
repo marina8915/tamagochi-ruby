@@ -6,13 +6,13 @@ ruby '2.5.3'
 
 gem 'rack', '~> 2.0', '>= 2.0.6'
 
-###Installation
+### Installation
 
 Clone repository.
 
     $ bundle install
     
-## Usage
+### Usage
 
     $ rackup
 
