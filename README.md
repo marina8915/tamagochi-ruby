@@ -2,6 +2,22 @@
 
 The game tamagotchi written in Ruby with Rack.
 
+ruby '2.5.3'
+
+gem 'rack', '~> 2.0', '>= 2.0.6'
+
+###Installation
+
+Clone repository.
+
+    $ bundle install
+    
+## Usage
+
+    $ rackup
+
+Open http://localhost:PORT
+
 You must enter the name of the pet.
 
 He can say what he wants now.

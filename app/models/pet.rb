@@ -3,12 +3,12 @@
 require 'time'
 
 module Tamagotchi
-  # class pet can read parameters - name, time, dreams, parameters, params_ignore
+  # class pet can read parameters - name, time, dreams, parameters, ignore
   # methods for action - play, sleep, awake, eat, drink, treat
   # methods for check and change parameters: increment_ignore, check_ignore, check
   # method check_health to check if the animal is still alive
   # check_time_sleep to check whether it's time for a pet to sleep
-  # speak - redirect to action depending on the path, displays the words of the pet
+  # speak - redirect to action depending on the path, displays the Pet`s words
   # reset_ignore - assign 0 for everyone of hash ignore parameter
   class Pet
     def initialize(req:, name:, params:, ignore:, time:, dreams:)
@@ -18,7 +18,7 @@ module Tamagotchi
       @say = ''
       # hash with key - appetite, health, humor, thirst
       @parameters = params
-      # hash with key ignoreEat, ignoreDrink, ignorePlay, ignoreSleep
+      # hash with key eat, drink, play, sleep
       @ignore = ignore
       # the time when the animal was created or the last awake
       @time = time
@@ -26,29 +26,14 @@ module Tamagotchi
       @dreams = dreams
     end
 
-    def attr_reader_name
-      @name
-    end
-
-    def attr_reader_time
-      @time
-    end
-
-    def attr_reader_dreams
-      @dreams
-    end
+    attr_reader :name, :time, :dreams, :ignore
 
     def parameters
       # check if the values are more than 100 or less than 0  => reassign value
-      @parameters.inject(@parameters) do |hash, (key, _)|
+      @parameters.each_with_object(@parameters) do |(key, _), hash|
         hash[key] = 100 if hash[key] > 100
         hash[key] = 0 if hash[key].negative?
-        hash
       end
-    end
-
-    def params_ignore
-      @ignore
     end
 
     def play
@@ -56,7 +41,7 @@ module Tamagotchi
       @parameters[:humor] += 20
       @parameters[:health] += 5
       @parameters[:appetite] -= 5
-      @ignore[:ignorePlay] = 0
+      @ignore[:play] = 0
       check
     end
 
@@ -70,7 +55,7 @@ module Tamagotchi
         @parameters[:health] += 5
         @parameters[:humor] += 5
         @parameters[:thirst] -= 10
-        @ignore[:ignoreEat] = 0
+        @ignore[:eat] = 0
       end
       check
     end
@@ -84,7 +69,7 @@ module Tamagotchi
         @parameters[:health] += 5
         @parameters[:humor] += 5
         @parameters[:thirst] += 10
-        @ignore[:ignoreDrink] = 0
+        @ignore[:drink] = 0
       end
       check
     end
@@ -102,71 +87,65 @@ module Tamagotchi
     def sleep
       @say = 'zzZ'
       @dreams = true
-      @ignore[:ignoreSleep] = 0
+      @ignore[:sleep] = 0
+      reset_ignore
+      @parameters.each_with_object(@parameters) do |(key, _), hash|
+        hash[key] += 20
+      end
     end
 
     def awake
       @time = Time.now
       @say = 'Good morning! '
-      reset_ignore
-      @parameters.inject(@parameters) do |hash, (key, _)|
-        hash[key] += 20
-        hash
-      end
       @dreams = false
       check
     end
 
     def check_time_sleep(period)
-      result = Time.now - @time >= period
-      @ignore[:ignoreSleep] += 1 if result
-      check
-      result
+      Time.now - @time >= period
     end
 
     # all ignore = 0
     def reset_ignore
-      @ignore.inject(@ignore) do |hash, (key, _)|
+      @ignore.each_with_object(@ignore) do |(key, _), hash|
         hash[key] = 0
-        hash
       end
     end
 
     def increment_ignore
       if @parameters[:appetite] < 100
         @say += 'I want to eat. '
-        @ignore[:ignoreEat] += 1
+        @ignore[:eat] += 1
       end
+      @ignore[:sleep] += 1 if check_time_sleep(20)
       @say += 'I am ill. ' if @parameters[:health] <= 50 || @parameters[:humor] <= 50
-      if @parameters[:humor] < 80
-        if @ignore[:ignoreSleep] >= 1
-          @say += 'I am tired.'
-          @ignore[:ignoreSleep] += 1
+      if @parameters[:humor] < 80 || @parameters[:health] < 80
+        if @ignore[:sleep] >= 1
+          @say += 'I am tired. '
         else
           @say += 'I want to play. '
-          @ignore[:ignorePlay] += 1
+          @ignore[:play] += 1
         end
       end
       if @parameters[:thirst] < 100
         @say += 'I want to drink. '
-        @ignore[:ignoreDrink] += 1
+        @ignore[:drink] += 1
       end
     end
 
     def check_ignore
-      @parameters[:humor] -= 5 if @ignore[:ignoreEat] >= 5
-      @parameters[:humor] -= 5 if @ignore[:ignoreDrink] >= 5
-      @parameters[:humor] -= 10 if @ignore[:ignorePlay] >= 5
-      @parameters[:health] -= 10 if @ignore[:ignoreSleep] >= 5
+      big_ignore = @ignore.select { |_, value| value >= 5 }
+      if big_ignore.size.positive?
+        @parameters[:humor] -= 5
+      elsif big_ignore.size > 1
+        @parameters[:health] -= 10
+      end
     end
 
     def check
-      @parameters[:health] -= 10 if @parameters[:humor] <= 50
-      @parameters[:health] -= 10 if @parameters[:thirst] < 50
-      @parameters[:health] -= 10 if @parameters[:appetite] < 50
-      @parameters[:health] -= 50 if @parameters[:humor].zero?
-      @parameters[:humor] -= 10 if @parameters[:appetite] < 50
-      @parameters[:humor] -= 10 if @parameters[:thirst] < 50
+      little_params = @parameters.select { |_, value| value.zero? || value <= 50 }
+      @parameters[:health] -= 10 if little_params.size.positive? || little_params.size > 1
+      @parameters[:humor] -= 10 if @parameters[:appetite] < 50 || @parameters[:thirst] < 50
       check_ignore
       increment_ignore
       parameters
