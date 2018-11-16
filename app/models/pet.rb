@@ -87,7 +87,6 @@ module Tamagotchi
     def sleep
       @say = 'zzZ'
       @dreams = true
-      @ignore[:sleep] = 0
       reset_ignore
       @parameters.each_with_object(@parameters) do |(key, _), hash|
         hash[key] += 20
@@ -98,7 +97,8 @@ module Tamagotchi
       @time = Time.now
       @say = 'Good morning! '
       @dreams = false
-      check
+      increment_ignore
+      time
     end
 
     def check_time_sleep(period)
@@ -117,12 +117,14 @@ module Tamagotchi
         @say += 'I want to eat. '
         @ignore[:eat] += 1
       end
-      @ignore[:sleep] += 1 if check_time_sleep(20)
-      @say += 'I am ill. ' if @parameters[:health] <= 50 || @parameters[:humor] <= 50
+      if check_time_sleep(20)
+        @say += 'I am tired. '
+        @ignore[:sleep] += 1
+      end
       if @parameters[:humor] < 80 || @parameters[:health] < 80
-        if @ignore[:sleep] >= 1
-          @say += 'I am tired. '
-        else
+        if @parameters[:health] <= 50 || @parameters[:humor] <= 50
+          @say += 'I am ill. '
+        elsif check_ignore.size.zero?
           @say += 'I want to play. '
           @ignore[:play] += 1
         end
@@ -134,16 +136,19 @@ module Tamagotchi
     end
 
     def check_ignore
-      big_ignore = @ignore.select { |_, value| value >= 5 }
-      @parameters[:humor] -= 5 if big_ignore.size.positive?
-      @parameters[:health] -= 10 if big_ignore.size > 1
+      ignore
+      @ignore.select { |_, value| value >= 5 }
     end
 
     def check
       little_params = @parameters.select { |_, value| value.zero? || value <= 50 }
       @parameters[:health] -= 10 if little_params.size.positive? || little_params.size > 1
       @parameters[:humor] -= 10 if @parameters[:appetite] < 50 || @parameters[:thirst] < 50
-      check_ignore
+
+      big_ignore = check_ignore
+      @parameters[:humor] -= 5 if big_ignore.size.positive?
+      @parameters[:health] -= 10 if big_ignore.size > 1
+
       increment_ignore
       parameters
     end
