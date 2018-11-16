@@ -9,11 +9,12 @@ module Tamagotchi
   # class PetController for model Pat
   class PetController
     class << self
+      # method action for create pet
       def pet(req)
         if req.params.key?('name')
           @pet = create_pet(req)
           # check if @pet_name less then 5 characters then create error
-          if @pet_name.delete(' ').size >= 5
+          if check_name
             return_page(status: 201, view: 'pet')
           else
             return_error('The name must contain at least 5 characters.')
@@ -22,7 +23,7 @@ module Tamagotchi
         end
       end
 
-      # method action for create, play, eat, drink, sleep, awake
+      # method action for play, eat, drink, sleep, awake
       def action(req)
         @pet = return_pet(req)
         if @pet.check_health
@@ -54,6 +55,10 @@ module Tamagotchi
       def return_pet(req)
         Pet.new(req: req, name: @pet_name, params: @pet.parameters,
                 ignore: @pet.ignore, time: @pet.time, dreams: @pet.dreams)
+      end
+
+      def check_name
+        @pet_name.delete(' ').size >= 5
       end
     end
   end
